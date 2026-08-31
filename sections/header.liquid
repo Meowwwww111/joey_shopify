@@ -1244,27 +1244,29 @@
 }
 
 /* =========================================================
-   NINI LABEL - HIDE HEADER ON SCROLL DOWN
-   SHOW HEADER ON SCROLL UP
+   NINI LABEL - SMART HEADER
+   SCROLL DOWN = HIDE
+   SCROLL UP = SHOW
    ========================================================= */
 
 #header-component {
   transition:
-    transform 0.45s ease,
-    opacity 0.45s ease;
-  will-change: transform;
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.55s ease;
+  will-change: transform, opacity;
 }
 
-/* Hidden while scrolling down */
-#header-component.nini-header-hidden {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
-/* Always show at the top of the page */
+/* Header visible */
 #header-component.nini-header-visible {
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
   opacity: 1;
+}
+
+/* Header hidden */
+#header-component.nini-header-hidden {
+  transform: translate3d(0, -100%, 0);
+  opacity: 0;
+  pointer-events: none;
 }
 
 {% endstylesheet %}
@@ -1312,25 +1314,107 @@
       else if (difference < -scrollThreshold) {
         header.classList.remove('nini-header-hidden');
         header.classList.add('nini-header-visible');
+      <script>
+  (function () {
+    const header = document.getElementById('header-component');
+
+    if (!header) return;
+
+    let lastScrollTop = 0;
+    let ticking = false;
+
+    const scrollThreshold = 8;
+    const topThreshold = 10;
+
+    function getScrollTop() {
+      /*
+       * Shopify themes can use either the window
+       * or an internal scrolling container.
+       */
+
+      const pageScroll =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+
+      const documentScroll =
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+
+      return Math.max(pageScroll, documentScroll);
+    }
+
+    function showHeader() {
+      header.classList.remove('nini-header-hidden');
+      header.classList.add('nini-header-visible');
+    }
+
+    function hideHeader() {
+      header.classList.remove('nini-header-visible');
+      header.classList.add('nini-header-hidden');
+    }
+
+    function updateHeader() {
+      const currentScrollTop = getScrollTop();
+      const difference = currentScrollTop - lastScrollTop;
+
+      /*
+       * Always show the header when at the top.
+       */
+      if (currentScrollTop <= topThreshold) {
+        showHeader();
+
+        lastScrollTop = currentScrollTop;
+        ticking = false;
+        return;
       }
 
-      lastScrollY = currentScrollY;
+      /*
+       * Scrolling DOWN
+       */
+      if (difference > scrollThreshold) {
+        hideHeader();
+      }
+
+      /*
+       * Scrolling UP
+       */
+      else if (difference < -scrollThreshold) {
+        showHeader();
+      }
+
+      lastScrollTop = currentScrollTop;
       ticking = false;
     }
 
-    window.addEventListener(
-      'scroll',
-      function () {
-        if (!ticking) {
-          window.requestAnimationFrame(updateHeader);
-          ticking = true;
-        }
-      },
-      { passive: true }
-    );
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(updateHeader);
+        ticking = true;
+      }
+    }
 
-    /* Initial state */
-    header.classList.add('nini-header-visible');
+    /*
+     * Start visible.
+     */
+    showHeader();
+
+    /*
+     * Listen to page scrolling.
+     */
+    window.addEventListener('scroll', onScroll, {
+      passive: true
+    });
+
+    /*
+     * Also listen for scrolling on document.
+     */
+    document.addEventListener('scroll', onScroll, {
+      passive: true
+    });
+
   })();
 </script>
 {% endunless %}
