@@ -2218,3 +2218,11 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
     margin-top: calc(var(--header-height) * var(--transparent-header-offset-boolean) * -1);
   }
 }
+
+/* Apply Handsome font store-wide */
+html, body, h1, h2, h3, h4, h5, h6,
+p, span, a, li, button, input, select, textarea,
+.h0, .h1, .h2, .h3, .h4, .h5, .h6,
+.button, .caption, .subheading {
+  font-family: "Handsome", cursive, sans-serif !important;
+}
