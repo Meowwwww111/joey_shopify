@@ -67,89 +67,89 @@
 </div>
 
 {% stylesheet %}
-  .nini-footer {
-    background: var(--nini-footer-background, #F9DCE0);
-    color: var(--nini-footer-text, #3C0106);
-    border-top: 1px solid rgba(60, 1, 6, 0.12);
-  }
+.nini-footer {
+  background: var(--nini-footer-background, #F9DCE0);
+  color: var(--nini-footer-text, #3C0106);
+  border-top: 1px solid rgba(60, 1, 6, 0.12);
+}
 
+.nini-footer__inner {
+  padding: 56px 40px 52px;
+}
+
+.nini-footer__columns {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 42px;
+}
+
+.nini-footer__heading {
+  margin: 0 0 22px;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: none;
+}
+
+.nini-footer__links,
+.nini-footer__social {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nini-footer__links li {
+  margin: 0 0 11px;
+}
+
+.nini-footer__links a,
+.nini-footer__social a {
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  transition: opacity 180ms ease;
+}
+
+.nini-footer__links a:hover,
+.nini-footer__social a:hover {
+  opacity: 0.6;
+}
+
+.nini-footer__social {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.nini-footer__follow-text {
+  margin-top: 22px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+@media screen and (max-width: 749px) {
   .nini-footer__inner {
-    padding-block: 56px 52px;
+    padding: 42px 24px;
   }
 
   .nini-footer__columns {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 42px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 38px 24px;
   }
 
   .nini-footer__heading {
-    margin: 0 0 22px;
-    font-size: 0.95rem;
-    line-height: 1.2;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    text-transform: none;
+    margin-bottom: 16px;
   }
+}
 
-  .nini-footer__links,
-  .nini-footer__social {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+@media screen and (max-width: 480px) {
+  .nini-footer__columns {
+    grid-template-columns: 1fr;
+    gap: 30px;
   }
-
-  .nini-footer__links li {
-    margin: 0 0 11px;
-  }
-
-  .nini-footer__links a,
-  .nini-footer__social a {
-    color: inherit;
-    text-decoration: none;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    transition: opacity 180ms ease;
-  }
-
-  .nini-footer__links a:hover,
-  .nini-footer__social a:hover {
-    opacity: 0.6;
-  }
-
-  .nini-footer__social {
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-  }
-
-  .nini-footer__follow-text {
-    margin-top: 22px;
-    font-size: 0.82rem;
-    line-height: 1.6;
-  }
-
-  @media screen and (max-width: 749px) {
-    .nini-footer__inner {
-      padding-block: 42px;
-    }
-
-    .nini-footer__columns {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 38px 24px;
-    }
-
-    .nini-footer__heading {
-      margin-bottom: 16px;
-    }
-  }
-
-  @media screen and (max-width: 480px) {
-    .nini-footer__columns {
-      grid-template-columns: 1fr;
-      gap: 30px;
-    }
-  }
+}
 {% endstylesheet %}
 
 {% schema %}
