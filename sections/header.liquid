@@ -1243,6 +1243,30 @@
   }
 }
 
+/* =========================================================
+   NINI LABEL - HIDE HEADER ON SCROLL DOWN
+   SHOW HEADER ON SCROLL UP
+   ========================================================= */
+
+#header-component {
+  transition:
+    transform 0.45s ease,
+    opacity 0.45s ease;
+  will-change: transform;
+}
+
+/* Hidden while scrolling down */
+#header-component.nini-header-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* Always show at the top of the page */
+#header-component.nini-header-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 {% endstylesheet %}
 
 {% unless request.design_mode %}
@@ -1252,6 +1276,63 @@
     url.searchParams.delete('page');
     hydrate('{{ section.id }}', url);
   </script>
+
+<script>
+  (function () {
+    const header = document.getElementById('header-component');
+
+    if (!header) return;
+
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const scrollThreshold = 5;
+
+    function updateHeader() {
+      const currentScrollY = window.scrollY;
+      const difference = currentScrollY - lastScrollY;
+
+      /* Always show header at the very top */
+      if (currentScrollY <= 10) {
+        header.classList.remove('nini-header-hidden');
+        header.classList.add('nini-header-visible');
+
+        lastScrollY = currentScrollY;
+        ticking = false;
+        return;
+      }
+
+      /* Scrolling DOWN */
+      if (difference > scrollThreshold) {
+        header.classList.add('nini-header-hidden');
+        header.classList.remove('nini-header-visible');
+      }
+
+      /* Scrolling UP */
+      else if (difference < -scrollThreshold) {
+        header.classList.remove('nini-header-hidden');
+        header.classList.add('nini-header-visible');
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (!ticking) {
+          window.requestAnimationFrame(updateHeader);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+
+    /* Initial state */
+    header.classList.add('nini-header-visible');
+  })();
+</script>
 {% endunless %}
 
 {% schema %}
