@@ -2,14 +2,6 @@
   box-sizing: border-box;
 }
 
-@font-face {
-  font-family: "Handsome";
-  src: url("{{ 'Handsome Regular.ttf' | asset_url }}") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 body {
   color: var(--color-foreground);
   background: var(--color-background);
@@ -2217,20 +2209,4 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
   .sticky-content {
     margin-top: calc(var(--header-height) * var(--transparent-header-offset-boolean) * -1);
   }
-}
-
-/* =========================================================
-   NINI LABEL — HANDSOME FONT
-   Apply Handsome font across the entire website
-   ========================================================= */
-
-html,
-body,
-body *,
-button,
-input,
-textarea,
-select,
-option {
-  font-family: "Handsome", cursive, sans-serif !important;
 }
