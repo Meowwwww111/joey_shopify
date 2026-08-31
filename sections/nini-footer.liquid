@@ -1,0 +1,234 @@
+{% liquid
+  assign info_menu = section.settings.information_menu
+  assign care_menu = section.settings.customer_care_menu
+  assign quick_menu = section.settings.quick_links_menu
+%}
+
+<div class="nini-footer">
+  <div class="nini-footer__inner page-width">
+    <div class="nini-footer__columns">
+      <div class="nini-footer__column">
+        <h2 class="nini-footer__heading">{{ section.settings.information_heading | escape }}</h2>
+        {% if info_menu != blank %}
+          <ul class="nini-footer__links" role="list">
+            {% for link in info_menu.links %}
+              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="nini-footer__column">
+        <h2 class="nini-footer__heading">{{ section.settings.customer_care_heading | escape }}</h2>
+        {% if care_menu != blank %}
+          <ul class="nini-footer__links" role="list">
+            {% for link in care_menu.links %}
+              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="nini-footer__column">
+        <h2 class="nini-footer__heading">{{ section.settings.quick_links_heading | escape }}</h2>
+        {% if quick_menu != blank %}
+          <ul class="nini-footer__links" role="list">
+            {% for link in quick_menu.links %}
+              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="nini-footer__column">
+        <h2 class="nini-footer__heading">{{ section.settings.follow_us_heading | escape }}</h2>
+
+        <div class="nini-footer__social">
+          {% if section.settings.instagram_url != blank %}
+            <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
+          {% endif %}
+          {% if section.settings.tiktok_url != blank %}
+            <a href="{{ section.settings.tiktok_url }}" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+          {% endif %}
+          {% if section.settings.facebook_url != blank %}
+            <a href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook">Facebook</a>
+          {% endif %}
+          {% if section.settings.telegram_url != blank %}
+            <a href="{{ section.settings.telegram_url }}" target="_blank" rel="noopener" aria-label="Telegram">Telegram</a>
+          {% endif %}
+        </div>
+
+        {% if section.settings.follow_text != blank %}
+          <div class="nini-footer__follow-text rte">{{ section.settings.follow_text }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .nini-footer {
+    background: var(--nini-footer-background, #F9DCE0);
+    color: var(--nini-footer-text, #3C0106);
+    border-top: 1px solid rgba(60, 1, 6, 0.12);
+  }
+
+  .nini-footer__inner {
+    padding-block: 56px 52px;
+  }
+
+  .nini-footer__columns {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 42px;
+  }
+
+  .nini-footer__heading {
+    margin: 0 0 22px;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: none;
+  }
+
+  .nini-footer__links,
+  .nini-footer__social {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nini-footer__links li {
+    margin: 0 0 11px;
+  }
+
+  .nini-footer__links a,
+  .nini-footer__social a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: opacity 180ms ease;
+  }
+
+  .nini-footer__links a:hover,
+  .nini-footer__social a:hover {
+    opacity: 0.6;
+  }
+
+  .nini-footer__social {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .nini-footer__follow-text {
+    margin-top: 22px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  @media screen and (max-width: 749px) {
+    .nini-footer__inner {
+      padding-block: 42px;
+    }
+
+    .nini-footer__columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 38px 24px;
+    }
+
+    .nini-footer__heading {
+      margin-bottom: 16px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .nini-footer__columns {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "NINI Label footer links",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "information_heading",
+      "label": "Information heading",
+      "default": "Information"
+    },
+    {
+      "type": "link_list",
+      "id": "information_menu",
+      "label": "Information menu"
+    },
+    {
+      "type": "text",
+      "id": "customer_care_heading",
+      "label": "Customer Care heading",
+      "default": "Customer Care"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_care_menu",
+      "label": "Customer Care menu"
+    },
+    {
+      "type": "text",
+      "id": "quick_links_heading",
+      "label": "Quick Links heading",
+      "default": "Quick links"
+    },
+    {
+      "type": "link_list",
+      "id": "quick_links_menu",
+      "label": "Quick Links menu"
+    },
+    {
+      "type": "text",
+      "id": "follow_us_heading",
+      "label": "Follow Us heading",
+      "default": "Follow Us"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook"
+    },
+    {
+      "type": "url",
+      "id": "telegram_url",
+      "label": "Telegram"
+    },
+    {
+      "type": "richtext",
+      "id": "follow_text",
+      "label": "Follow Us text",
+      "default": "<p>Follow us for new arrivals, updates and exclusive offers.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "NINI Label footer links"
+    }
+  ]
+}
+{% endschema %}
