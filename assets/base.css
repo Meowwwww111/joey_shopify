@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
 }
+
 @font-face {
   font-family: "Handsome";
   src: url("{{ 'Handsome Regular.ttf' | asset_url }}") format("truetype");
@@ -8,6 +9,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 body {
   color: var(--color-foreground);
   background: var(--color-background);
