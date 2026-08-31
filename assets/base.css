@@ -2219,10 +2219,18 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
   }
 }
 
-/* Apply Handsome font store-wide */
-html, body, h1, h2, h3, h4, h5, h6,
-p, span, a, li, button, input, select, textarea,
-.h0, .h1, .h2, .h3, .h4, .h5, .h6,
-.button, .caption, .subheading {
+/* =========================================================
+   NINI LABEL — HANDSOME FONT
+   Apply Handsome font across the entire website
+   ========================================================= */
+
+html,
+body,
+body *,
+button,
+input,
+textarea,
+select,
+option {
   font-family: "Handsome", cursive, sans-serif !important;
 }
