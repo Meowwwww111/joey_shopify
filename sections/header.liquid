@@ -362,25 +362,7 @@
     {% endif %}
   "
 >
-<!-- NINI LABEL CUSTOM LOGO -->
-<div class="nini-custom-logo-row">
-  <a
-    href="{{ routes.root_url }}"
-    class="nini-custom-logo-link"
-    aria-label="{{ shop.name }}"
-  >
-    <img
-      src="{{ 'NiniLabel.png' | asset_url }}"
-      alt="NINI LABEL"
-      class="nini-custom-logo"
-      width="240"
-      height="80"
-      loading="eager"
-    >
-  </a>
-</div>
-
-<div class="header__underlay header__underlay-closed"></div>
+  <div class="header__underlay header__underlay-closed"></div>
   <div
     class="header__underlay header__underlay-open"
   ></div>
@@ -667,7 +649,7 @@
   }
 
   .header[data-sticky-state='idle'] {
-    opacity: 1;
+    opacity: 0;
   }
 
   /* ================================
@@ -1185,90 +1167,6 @@
     font-family: var(--menu-localization-font);
     font-size: var(--menu-localization-font-size);
   }
-/* =========================================================
-   NINI LABEL - CUSTOM CENTERED LOGO
-   ========================================================= */
-
-.nini-custom-logo-row {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 18px 20px 12px;
-  position: relative;
-  z-index: var(--layer-heightened);
-
-  /* NINI LABEL logo bar */
-  background: #ffffff;
-}
-
-.nini-custom-logo-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-
-.nini-custom-logo {
-  display: block;
-  width: auto;
-  max-width: 220px;
-  height: auto;
-  max-height: 75px;
-  object-fit: contain;
-}
-
-/* Desktop navigation sits underneath the logo */
-@media screen and (min-width: 750px) {
-  .nini-custom-logo-row {
-    padding-top: 20px;
-    padding-bottom: 14px;
-  }
-
-  .nini-custom-logo {
-    max-width: 240px;
-    max-height: 80px;
-  }
-}
-
-/* Mobile */
-@media screen and (max-width: 749px) {
-  .nini-custom-logo-row {
-    padding: 14px 16px 8px;
-  }
-
-  .nini-custom-logo {
-    max-width: 170px;
-    max-height: 60px;
-  }
-}
-
-/* =========================================================
-   NINI LABEL - SMART HEADER
-   SCROLL DOWN = HIDE
-   SCROLL UP = SHOW
-   ========================================================= */
-
-#header-component {
-  transition:
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.55s ease;
-  will-change: transform, opacity;
-}
-
-/* Header visible */
-#header-component.nini-header-visible {
-  transform: translate3d(0, 0, 0);
-  opacity: 1;
-}
-
-/* Header hidden */
-#header-component.nini-header-hidden {
-  transform: translate3d(0, -100%, 0);
-  opacity: 0;
-  pointer-events: none;
-}
-
 {% endstylesheet %}
 
 {% unless request.design_mode %}
@@ -1278,145 +1176,6 @@
     url.searchParams.delete('page');
     hydrate('{{ section.id }}', url);
   </script>
-
-<script>
-  (function () {
-    const header = document.getElementById('header-component');
-
-    if (!header) return;
-
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-
-    const scrollThreshold = 5;
-
-    function updateHeader() {
-      const currentScrollY = window.scrollY;
-      const difference = currentScrollY - lastScrollY;
-
-      /* Always show header at the very top */
-      if (currentScrollY <= 10) {
-        header.classList.remove('nini-header-hidden');
-        header.classList.add('nini-header-visible');
-
-        lastScrollY = currentScrollY;
-        ticking = false;
-        return;
-      }
-
-      /* Scrolling DOWN */
-      if (difference > scrollThreshold) {
-        header.classList.add('nini-header-hidden');
-        header.classList.remove('nini-header-visible');
-      }
-
-      /* Scrolling UP */
-      else if (difference < -scrollThreshold) {
-        header.classList.remove('nini-header-hidden');
-        header.classList.add('nini-header-visible');
-      <script>
-  (function () {
-    const header = document.getElementById('header-component');
-
-    if (!header) return;
-
-    let lastScrollTop = 0;
-    let ticking = false;
-
-    const scrollThreshold = 8;
-    const topThreshold = 10;
-
-    function getScrollTop() {
-      /*
-       * Shopify themes can use either the window
-       * or an internal scrolling container.
-       */
-
-      const pageScroll =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
-        0;
-
-      const documentScroll =
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
-        0;
-
-      return Math.max(pageScroll, documentScroll);
-    }
-
-    function showHeader() {
-      header.classList.remove('nini-header-hidden');
-      header.classList.add('nini-header-visible');
-    }
-
-    function hideHeader() {
-      header.classList.remove('nini-header-visible');
-      header.classList.add('nini-header-hidden');
-    }
-
-    function updateHeader() {
-      const currentScrollTop = getScrollTop();
-      const difference = currentScrollTop - lastScrollTop;
-
-      /*
-       * Always show the header when at the top.
-       */
-      if (currentScrollTop <= topThreshold) {
-        showHeader();
-
-        lastScrollTop = currentScrollTop;
-        ticking = false;
-        return;
-      }
-
-      /*
-       * Scrolling DOWN
-       */
-      if (difference > scrollThreshold) {
-        hideHeader();
-      }
-
-      /*
-       * Scrolling UP
-       */
-      else if (difference < -scrollThreshold) {
-        showHeader();
-      }
-
-      lastScrollTop = currentScrollTop;
-      ticking = false;
-    }
-
-    function onScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(updateHeader);
-        ticking = true;
-      }
-    }
-
-    /*
-     * Start visible.
-     */
-    showHeader();
-
-    /*
-     * Listen to page scrolling.
-     */
-    window.addEventListener('scroll', onScroll, {
-      passive: true
-    });
-
-    /*
-     * Also listen for scrolling on document.
-     */
-    document.addEventListener('scroll', onScroll, {
-      passive: true
-    });
-
-  })();
-</script>
 {% endunless %}
 
 {% schema %}
