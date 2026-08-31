@@ -471,9 +471,9 @@
 
 {% stylesheet %}
   body {
-    --header-height: 60px;
+    --header-height: 80px;
     --header-group-height: var(--header-height);
-    --transparent-header-offset-boolean: 0; /* stylelint-disable-line declaration-property-value-disallowed-list */
+    --transparent-header-offset-boolean: 0;
   }
 
   .header {
@@ -621,16 +621,67 @@
   }
 
   #header-group:has(#header-component[sticky]) {
-    display: contents;
+    display: block;
+    width: 100%;
+  }
+  /* =========================================
+   FIXED / STICKY HEADER
+   ========================================= */
+
+  #header-group:has(#header-component[sticky='always']) {
+    min-height: var(--header-group-height);
   }
 
-  .header-section:has(> #header-component[sticky='always']),
-  .header-section:has(> #header-component[sticky='scroll-up'][data-sticky-state='active']) {
-    position: sticky;
+  #header-group:has(#header-component[sticky='always'])
+    + .shopify-section:first-of-type {
+    padding-top: var(--header-group-height);
+  }
 
-    /* Use -1 instead of 0 so intersection observer can track sticky state */
-    top: -1px;
+  /* Keep header above all page content */
+  .header-section:has(#header-component[sticky]) {
+    isolation: isolate;
+  }
+
+  /* Ensure the header spans the entire viewport */
+  .header-section:has(#header-component[sticky]),
+  .header-section:has(#header-component[sticky]) #header-component {
+    width: 100%;
+    max-width: none;
+  }
+
+  .header-section:has(> #header-component[sticky='always']) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: var(--layer-menu-drawer);
+  }
+
+  .header-section:has(> #header-component[sticky='scroll-up']) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: var(--layer-menu-drawer);
+  }
+
+  .header-section:has(> #header-component[sticky='scroll-up'])
+    #header-component[data-sticky-state='idle'] {
+    transform: translateY(-100%);
+  }
+
+  .header-section:has(> #header-component[sticky='scroll-up'])
+    #header-component[data-sticky-state='active'] {
+    transform: translateY(0);
+  }
+
+  #header-component {
+    width: 100%;
+    transition:
+      transform var(--animation-speed) var(--animation-easing),
+      opacity var(--animation-speed) var(--animation-easing);
   }
 
   .header[data-sticky-state] {
