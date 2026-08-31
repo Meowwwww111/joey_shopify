@@ -362,19 +362,25 @@
     {% endif %}
   "
 >
-  <!-- NINI LABEL CUSTOM LOGO ROW -->
-  <div class="nini-custom-logo-row">
-    <a href="{{ routes.root_url }}" class="nini-custom-logo-link" aria-label="{{ shop.name }}">
-      <img
-        src="{{ 'NiniLabel.png' | file_url }}"
-        alt="NINI LABEL"
-        class="nini-custom-logo"
-        loading="eager"
-      >
-    </a>
-  </div>
+<!-- NINI LABEL CUSTOM LOGO -->
+<div class="nini-custom-logo-row">
+  <a
+    href="{{ routes.root_url }}"
+    class="nini-custom-logo-link"
+    aria-label="{{ shop.name }}"
+  >
+    <img
+      src="{{ 'NiniLabel.png' | asset_url }}"
+      alt="NINI LABEL"
+      class="nini-custom-logo"
+      width="240"
+      height="80"
+      loading="eager"
+    >
+  </a>
+</div>
 
-  <div class="header__underlay header__underlay-closed"></div>
+<div class="header__underlay header__underlay-closed"></div>
   <div
     class="header__underlay header__underlay-open"
   ></div>
