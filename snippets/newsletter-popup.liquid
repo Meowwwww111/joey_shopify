@@ -1,0 +1,322 @@
+{% comment %}
+  NINI LABEL Newsletter Popup
+  - Collects newsletter subscribers using Shopify's customer form.
+  - Shows a first-order discount after successful signup.
+  - Uses sessionStorage/localStorage so the popup does not repeatedly interrupt visitors.
+{% endcomment %}
+
+<div
+  id="nini-newsletter-popup"
+  class="nini-newsletter-popup"
+  aria-hidden="true"
+  data-delay="1800"
+  data-storage-key="nini-newsletter-popup-v1"
+>
+  <div class="nini-newsletter-popup__backdrop" data-nini-popup-close></div>
+
+  <div
+    class="nini-newsletter-popup__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="nini-newsletter-popup-title"
+    aria-describedby="nini-newsletter-popup-description"
+  >
+    <button
+      type="button"
+      class="nini-newsletter-popup__close"
+      aria-label="Close newsletter popup"
+      data-nini-popup-close
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div class="nini-newsletter-popup__content">
+      <p class="nini-newsletter-popup__eyebrow">WELCOME TO NINI LABEL</p>
+      <h2 id="nini-newsletter-popup-title">GET 10% OFF YOUR FIRST ORDER</h2>
+      <p id="nini-newsletter-popup-description">
+        Subscribe to our newsletter and receive 10% off your first order, plus be the first to know about new arrivals and exclusive offers.
+      </p>
+
+      {% form 'customer', class: 'nini-newsletter-popup__form', id: 'NiniNewsletterPopupForm' %}
+        <input type="hidden" name="contact[tags]" value="newsletter, nini-label-popup">
+        <input type="hidden" name="contact[accepts_marketing]" value="true">
+
+        {% if form.posted_successfully? %}
+          <div class="nini-newsletter-popup__success" role="status">
+            <p class="nini-newsletter-popup__success-title">YOU'RE IN ♡</p>
+            <p>Thank you for subscribing. Your first-order discount code is:</p>
+            <strong class="nini-newsletter-popup__code">WELCOME10</strong>
+            <button type="button" class="nini-newsletter-popup__continue" data-nini-popup-close>CONTINUE SHOPPING</button>
+          </div>
+        {% else %}
+          {% if form.errors %}
+            <div class="nini-newsletter-popup__error" role="alert">
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          <label class="visually-hidden" for="NiniNewsletterPopupEmail">Email address</label>
+          <input
+            id="NiniNewsletterPopupEmail"
+            class="nini-newsletter-popup__input"
+            type="email"
+            name="contact[email]"
+            value="{{ form.email }}"
+            placeholder="Enter your email address"
+            autocomplete="email"
+            required
+          >
+          <button type="submit" class="nini-newsletter-popup__submit">GET MY 10% OFF</button>
+          <p class="nini-newsletter-popup__fine-print">By subscribing, you agree to receive marketing emails from NINI LABEL.</p>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .nini-newsletter-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease, visibility 220ms ease;
+  }
+
+  .nini-newsletter-popup.is-open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nini-newsletter-popup__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 48%);
+    backdrop-filter: blur(2px);
+  }
+
+  .nini-newsletter-popup__dialog {
+    position: relative;
+    z-index: 1;
+    width: min(520px, 100%);
+    max-height: calc(100vh - 40px);
+    overflow: auto;
+    background: var(--color-background, #fff);
+    color: var(--color-foreground, #111);
+    border-radius: 2px;
+    box-shadow: 0 24px 70px rgb(0 0 0 / 24%);
+    transform: translateY(12px) scale(.98);
+    transition: transform 220ms ease;
+  }
+
+  .nini-newsletter-popup.is-open .nini-newsletter-popup__dialog {
+    transform: translateY(0) scale(1);
+  }
+
+  .nini-newsletter-popup__content {
+    padding: 46px 42px 38px;
+    text-align: center;
+  }
+
+  .nini-newsletter-popup__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  .nini-newsletter-popup__eyebrow {
+    margin: 0 0 12px;
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    opacity: .68;
+  }
+
+  .nini-newsletter-popup h2 {
+    margin: 0 auto 14px;
+    max-width: 390px;
+    font-size: clamp(26px, 5vw, 38px);
+    line-height: 1.08;
+  }
+
+  .nini-newsletter-popup__content > p:not(.nini-newsletter-popup__eyebrow) {
+    max-width: 410px;
+    margin: 0 auto 24px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .nini-newsletter-popup__form {
+    display: grid;
+    gap: 10px;
+  }
+
+  .nini-newsletter-popup__input {
+    width: 100%;
+    min-height: 50px;
+    padding: 13px 15px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    box-sizing: border-box;
+  }
+
+  .nini-newsletter-popup__submit,
+  .nini-newsletter-popup__continue {
+    width: 100%;
+    min-height: 50px;
+    padding: 13px 18px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    background: currentColor;
+    color: var(--color-background, #fff);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    letter-spacing: .08em;
+  }
+
+  .nini-newsletter-popup__fine-print {
+    margin: 4px 0 0 !important;
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+    opacity: .58;
+  }
+
+  .nini-newsletter-popup__success {
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+  }
+
+  .nini-newsletter-popup__success p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .nini-newsletter-popup__success-title {
+    font-size: 25px !important;
+    font-weight: 600;
+  }
+
+  .nini-newsletter-popup__code {
+    display: inline-block;
+    padding: 10px 18px;
+    border: 1px dashed currentColor;
+    font-size: 18px;
+    letter-spacing: .12em;
+  }
+
+  .nini-newsletter-popup__continue {
+    margin-top: 8px;
+  }
+
+  .nini-newsletter-popup__error {
+    margin-bottom: 4px;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  body.nini-newsletter-popup-open {
+    overflow: hidden;
+  }
+
+  @media screen and (max-width: 749px) {
+    .nini-newsletter-popup {
+      padding: 14px;
+    }
+
+    .nini-newsletter-popup__content {
+      padding: 40px 22px 26px;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  (function () {
+    var popup = document.getElementById('nini-newsletter-popup');
+    if (!popup) return;
+
+    var storageKey = popup.dataset.storageKey || 'nini-newsletter-popup-v1';
+    var delay = parseInt(popup.dataset.delay || '1800', 10);
+    var form = popup.querySelector('form');
+    var hasSuccess = !!popup.querySelector('.nini-newsletter-popup__success');
+
+    function getStorage(type) {
+      try {
+        return window[type];
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function openPopup() {
+      popup.classList.add('is-open');
+      popup.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('nini-newsletter-popup-open');
+      var input = popup.querySelector('input[type="email"]');
+      if (input) window.setTimeout(function () { input.focus(); }, 250);
+    }
+
+    function closePopup(markDismissed) {
+      popup.classList.remove('is-open');
+      popup.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('nini-newsletter-popup-open');
+      if (markDismissed) {
+        var session = getStorage('sessionStorage');
+        if (session) session.setItem(storageKey + '-dismissed', '1');
+      }
+    }
+
+    var local = getStorage('localStorage');
+    var session = getStorage('sessionStorage');
+    var subscribed = local && local.getItem(storageKey + '-subscribed') === '1';
+    var dismissed = session && session.getItem(storageKey + '-dismissed') === '1';
+
+    if (hasSuccess) {
+      if (local) local.setItem(storageKey + '-subscribed', '1');
+      window.setTimeout(openPopup, 100);
+    } else if (!subscribed && !dismissed) {
+      window.setTimeout(openPopup, delay);
+    }
+
+    popup.querySelectorAll('[data-nini-popup-close]').forEach(function (element) {
+      element.addEventListener('click', function () {
+        closePopup(true);
+      });
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && popup.classList.contains('is-open')) {
+        closePopup(true);
+      }
+    });
+
+    if (form) {
+      form.addEventListener('submit', function () {
+        if (local) local.setItem(storageKey + '-subscribed', '1');
+      });
+    }
+  })();
+</script>
